@@ -12,7 +12,7 @@ use App;
  * 用于Service模块抛出的异常。
  *
  * @author lisijie <lsj86@qq.com>
- * @package Core\Exception
+ * @package App\Exception
  */
 class Handler extends BaseHandler
 {
