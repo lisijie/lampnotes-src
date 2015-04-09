@@ -28,7 +28,7 @@ class UserProfileModel extends Model
      */
     public function getByUserId($userId)
     {
-        return $this->getRow(array('user_id'=>$userId));
+        return $this->getRow(array('user_id' => $userId));
     }
 
     /**
@@ -40,7 +40,7 @@ class UserProfileModel extends Model
      */
     public function getListByUserIds(array $userIds, array $fields)
     {
-        return $this->select($fields, array('user_id'=>$userIds));
+        return $this->select($fields, array('user_id' => $userIds));
     }
 
     /**

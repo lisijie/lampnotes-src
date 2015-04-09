@@ -20,7 +20,7 @@ class SiteModel extends Model
 
     public function getListByScore($num)
     {
-        return $this->select(array(), array(), array('score'=>'desc'), $num);
+        return $this->select(array(), array(), array('score' => 'desc'), $num);
     }
 
     /**

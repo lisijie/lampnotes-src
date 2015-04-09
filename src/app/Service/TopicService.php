@@ -11,15 +11,15 @@ use App\Model\VoteLogModel;
 class TopicService extends ServiceBase
 {
 
-	/**
-	 * 添加话题
-	 *
-	 * @param $data
-	 * @return int
-	 * @throws ServiceException
-	 */
-	public static function addTopic($data)
-	{
+    /**
+     * 添加话题
+     *
+     * @param $data
+     * @return int
+     * @throws ServiceException
+     */
+    public static function addTopic($data)
+    {
         if (!isset($data['create_time'])) {
             $data['create_time'] = NOW;
         }
@@ -47,14 +47,14 @@ class TopicService extends ServiceBase
             }
         }
 
-		$topicId = TopicModel::getInstance()->addTopic($data);
+        $topicId = TopicModel::getInstance()->addTopic($data);
 
         if (!$topicId) {
             throw new ServiceException('投递失败');
         }
 
         if (!empty($data['url'])) {
-	        $urlModel->add(crc32($data['url']), $topicId);
+            $urlModel->add(crc32($data['url']), $topicId);
         }
 
         //更新分数
@@ -67,8 +67,8 @@ class TopicService extends ServiceBase
             SiteService::updateScore($data['site_id'], 'add_topic');
         }
 
-		return $topicId;
-	}
+        return $topicId;
+    }
 
     /**
      * 获取热门话题列表
@@ -78,17 +78,17 @@ class TopicService extends ServiceBase
      * @param int $total
      * @return array
      */
-    public static function getHotTopicList($page, $pageSize,  &$total)
-	{
+    public static function getHotTopicList($page, $pageSize, &$total)
+    {
         $pageSize = max(0, min($pageSize, 100));
-		$topicModel = TopicModel::getInstance();
+        $topicModel = TopicModel::getInstance();
         $list = $topicModel->getHotTopicList($page, $pageSize);
         if (!$total) $total = $topicModel->getTotalNum();
         foreach ($list as &$row) {
             $row['domain'] = static::getDomain($row['url']);
         }
-		return $list;
-	}
+        return $list;
+    }
 
     /**
      * 获取最新话题列表
@@ -139,16 +139,16 @@ class TopicService extends ServiceBase
      * @throws ServiceException
      */
     public static function getTopicInfo($topicId)
-	{
-		$topicModel = TopicModel::getInstance();
-		$topicInfo = $topicModel->getTopicById($topicId);
-		if (empty($topicInfo)) {
-			throw new ServiceException('话题不存在');
-		}
+    {
+        $topicModel = TopicModel::getInstance();
+        $topicInfo = $topicModel->getTopicById($topicId);
+        if (empty($topicInfo)) {
+            throw new ServiceException('话题不存在');
+        }
         $topicInfo['domain'] = static::getDomain($topicInfo['url']);
 
-		return $topicInfo;
-	}
+        return $topicInfo;
+    }
 
     public static function getHotScore($time, $up, $down = 0)
     {
@@ -176,7 +176,7 @@ class TopicService extends ServiceBase
         if (!$topic) {
             throw new ServiceException('话题不存在');
         }
-        $topic['up_count'] ++;
+        $topic['up_count']++;
 
         //检查是否投过票
         if (VoteLogModel::getInstance()->get($topicId, $userId)) {

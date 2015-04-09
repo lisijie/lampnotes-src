@@ -12,43 +12,43 @@ use App\Model\UserProfileModel;
 
 class UserAccountService extends ServiceBase
 {
-	//用户名最小长度
-	const USER_NAME_MIN_LEN = 3;
-	//用户名最大长度
-	const USER_NAME_MAX_LEN = 15;
-	//Email最大长度
-	const EMAIL_MAX_LEN = 50;
+    //用户名最小长度
+    const USER_NAME_MIN_LEN = 3;
+    //用户名最大长度
+    const USER_NAME_MAX_LEN = 15;
+    //Email最大长度
+    const EMAIL_MAX_LEN = 50;
     //密码最小长度
     const PASSWORD_MIN_LEN = 6;
 
-	//使用用户名登录
-	const LOGIN_BY_USERNAME = 1;
-	//使用Email登录
-	const LOGIN_BY_EMAIL = 2;
+    //使用用户名登录
+    const LOGIN_BY_USERNAME = 1;
+    //使用Email登录
+    const LOGIN_BY_EMAIL = 2;
 
-	//-----错误号声明-----
-	const ERRCODE_NO_ACTIVE = 1; //未激活
+    //-----错误号声明-----
+    const ERRCODE_NO_ACTIVE = 1; //未激活
 
-	public static function register($userName, $password, $email)
-	{
-		//验证用户名
-		if (empty($userName)) {
-			throw new ServiceException('用户名不能为空');
-		}
-		if (!Validate::valid('/^[a-z0-9][a-z0-9_]{'.(self::USER_NAME_MIN_LEN-1).','.(self::USER_NAME_MAX_LEN-1).'}/i', $userName)) {
-			throw new ServiceException('用户名不合法');
-		}
+    public static function register($userName, $password, $email)
+    {
+        //验证用户名
+        if (empty($userName)) {
+            throw new ServiceException('用户名不能为空');
+        }
+        if (!Validate::valid('/^[a-z0-9][a-z0-9_]{' . (self::USER_NAME_MIN_LEN - 1) . ',' . (self::USER_NAME_MAX_LEN - 1) . '}/i', $userName)) {
+            throw new ServiceException('用户名不合法');
+        }
 
-		//验证Email
-		if (!isset($email)) {
-			throw new ServiceException('Email不能为空');
-		}
-		if (!Validate::valid('email', $email)) {
-			throw new ServiceException('Email无效');
-		}
-		if (String::len($email) > self::EMAIL_MAX_LEN) {
-			throw new ServiceException('Email长度不能大于'.self::EMAIL_MAX_LEN.'字符');
-		}
+        //验证Email
+        if (!isset($email)) {
+            throw new ServiceException('Email不能为空');
+        }
+        if (!Validate::valid('email', $email)) {
+            throw new ServiceException('Email无效');
+        }
+        if (String::len($email) > self::EMAIL_MAX_LEN) {
+            throw new ServiceException('Email长度不能大于' . self::EMAIL_MAX_LEN . '字符');
+        }
 
         //验证密码
         if (!isset($password)) {
@@ -58,87 +58,87 @@ class UserAccountService extends ServiceBase
             throw new ServiceException('密码长度必须在6个字符以上');
         }
 
-		$userModel = UserModel::getInstance();
+        $userModel = UserModel::getInstance();
 
-		//检查用户是否已存在
-		if ($userModel->checkUserName($userName) || $userModel->checkNickName($userName)) {
-			throw new ServiceException('用户名已存在');
-		}
-		//检查Email是否已存在
-		if ($userModel->checkEmail($email)) {
-			throw new ServiceException('Email已存在');
-		}
+        //检查用户是否已存在
+        if ($userModel->checkUserName($userName) || $userModel->checkNickName($userName)) {
+            throw new ServiceException('用户名已存在');
+        }
+        //检查Email是否已存在
+        if ($userModel->checkEmail($email)) {
+            throw new ServiceException('Email已存在');
+        }
 
-		$salt = String::random(10);
-		$user = array(
-			'user_name' => $userName,
-			'nick_name' => $userName,
-			'email' => $email,
-			'password' => Password::hash($password, $salt),
-			'salt' => $salt,
-			'reg_time' => NOW,
+        $salt = String::random(10);
+        $user = array(
+            'user_name' => $userName,
+            'nick_name' => $userName,
+            'email' => $email,
+            'password' => Password::hash($password, $salt),
+            'salt' => $salt,
+            'reg_time' => NOW,
             'active' => 0,
-			'reg_ip' => ip2long(App::getRequest()->getClientIp()),
-		);
+            'reg_ip' => ip2long(App::getRequest()->getClientIp()),
+        );
 
-		$userId = $userModel->addUser($user);
-		$profileModel = UserProfileModel::getInstance();
-		$profileModel->add(array('user_id'=>$userId));
+        $userId = $userModel->addUser($user);
+        $profileModel = UserProfileModel::getInstance();
+        $profileModel->add(array('user_id' => $userId));
 
-		return $userId;
-	}
+        return $userId;
+    }
 
-	/**
-	 * 用户登录
-	 *
-	 * @param string $account 帐号
-	 * @param string $password 密码
-	 * @param int $expire 有效期/秒
-	 * @param int $type 登录类型
-	 * @return bool
+    /**
+     * 用户登录
+     *
+     * @param string $account 帐号
+     * @param string $password 密码
+     * @param int $expire 有效期/秒
+     * @param int $type 登录类型
+     * @return bool
      * @throws ServiceException
-	 */
+     */
     public static function login($account, $password, $expire = 0, $type = self::LOGIN_BY_USERNAME)
-	{
-		$userModel = UserModel::getInstance();
-		switch ($type) {
-			case self::LOGIN_BY_USERNAME:
-				if (empty($account) || !Validate::username($account)) {
-					throw new ServiceException('用户名无效');
-				}
-				$user = $userModel->getByUserName($account);
-				break;
-			case self::LOGIN_BY_EMAIL:
-				if (empty($account) || !Validate::valid('email', $account)) {
-					throw new ServiceException('Email无效');
-				}
-				$user = $userModel->getByEmail($account);
-				break;
-			default:
-				throw new ServiceException('登录类型无效:'.$type);
-		}
+    {
+        $userModel = UserModel::getInstance();
+        switch ($type) {
+            case self::LOGIN_BY_USERNAME:
+                if (empty($account) || !Validate::username($account)) {
+                    throw new ServiceException('用户名无效');
+                }
+                $user = $userModel->getByUserName($account);
+                break;
+            case self::LOGIN_BY_EMAIL:
+                if (empty($account) || !Validate::valid('email', $account)) {
+                    throw new ServiceException('Email无效');
+                }
+                $user = $userModel->getByEmail($account);
+                break;
+            default:
+                throw new ServiceException('登录类型无效:' . $type);
+        }
 
-		if (empty($user)) {
-			throw new ServiceException('用户不存在');
-		}
-		if (Password::hash($password, $user['salt']) != $user['password']) {
-			throw new ServiceException('密码错误');
-		}
-		if (!$user['active']) {
-			//throw new ServiceException('用户未激活', self::ERRCODE_NO_ACTIVE);
-		}
+        if (empty($user)) {
+            throw new ServiceException('用户不存在');
+        }
+        if (Password::hash($password, $user['salt']) != $user['password']) {
+            throw new ServiceException('密码错误');
+        }
+        if (!$user['active']) {
+            //throw new ServiceException('用户未激活', self::ERRCODE_NO_ACTIVE);
+        }
 
         UserCookieService::setLoginCookie($user, $expire);
 
-		$update = array(
-			'last_ip' => ip2long(App::getRequest()->getClientIp()),
-			'last_login' => NOW,
-			'login_count' => $user['login_count'] + 1,
-		);
-		$userModel->updateUser($user['id'], $update);
+        $update = array(
+            'last_ip' => ip2long(App::getRequest()->getClientIp()),
+            'last_login' => NOW,
+            'login_count' => $user['login_count'] + 1,
+        );
+        $userModel->updateUser($user['id'], $update);
 
-		return true;
-	}
+        return true;
+    }
 
     /**
      * 修改密码
@@ -149,7 +149,7 @@ class UserAccountService extends ServiceBase
      * @return bool
      * @throws ServiceException
      */
-    public static  function changePassword($userId, $oldPassword, $newPassword)
+    public static function changePassword($userId, $oldPassword, $newPassword)
     {
         if (empty($userId) || !is_numeric($userId)) {
             throw new ServiceException('用户ID无效');
@@ -170,10 +170,9 @@ class UserAccountService extends ServiceBase
         $userModel = UserModel::getInstance();
         $userInfo = $userModel->getById($userId);
         if (empty($userInfo)) {
-            throw new ServiceException('用户不存在:'.$userId);
+            throw new ServiceException('用户不存在:' . $userId);
         }
-        if ($userInfo['password'] != Password::hash($oldPassword, $userInfo['salt']))
-        {
+        if ($userInfo['password'] != Password::hash($oldPassword, $userInfo['salt'])) {
             throw new ServiceException('当前密码错误');
         }
         $update = array(
@@ -235,7 +234,7 @@ class UserAccountService extends ServiceBase
         $userModel = UserModel::getInstance();
         $userInfo = $userModel->getById($userId);
         if (empty($userInfo)) {
-            throw new ServiceException('用户不存在:'.$userId);
+            throw new ServiceException('用户不存在:' . $userId);
         }
         return $userInfo;
     }
@@ -252,7 +251,7 @@ class UserAccountService extends ServiceBase
         $userModel = UserModel::getInstance();
         $userInfo = $userModel->getByUserName($userName);
         if (empty($userInfo)) {
-            throw new ServiceException('用户不存在:'.$userName);
+            throw new ServiceException('用户不存在:' . $userName);
         }
         return $userInfo;
     }

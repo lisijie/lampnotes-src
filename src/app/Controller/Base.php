@@ -2,8 +2,6 @@
 namespace App\Controller;
 
 use \App;
-use App\Common\Util;
-use App\Service\UserAccountService;
 use App\Service\UserCookieService;
 use Core\Controller;
 use Core\Lib\Pager;
@@ -38,28 +36,28 @@ class Base extends Controller
      */
     protected $userInfo = array();
 
-	/**
+    /**
      * session对象
      *
-	 * @var \Core\Session\Session;
-	 */
-	protected $session;
+     * @var \Core\Session\Session;
+     */
+    protected $session;
 
     public function init()
     {
-	    $this->session = App::get('session');
+        $this->session = App::get('session');
 
-	    $this->request->addFilter('\\Core\\Lib\\String::safeStr');
+        $this->request->addFilter('\\Core\\Lib\\String::safeStr');
         $this->view->registerFunc('time', '\\App\\Common\\Util::strTime');
 
-        $this->view->registerFunc('pager', function($page, $pageSize, $totalNum, $route = CUR_ROUTE, $params = array()) {
+        $this->view->registerFunc('pager', function ($page, $pageSize, $totalNum, $route = CUR_ROUTE, $params = array()) {
             $pager = new Pager($page, $pageSize, $totalNum, $route, $params);
             return $pager->makeHtml();
         });
 
         $userInfo = UserCookieService::getLoginInfo();
         if (empty($userInfo)) {
-            $userInfo = array('user_id'=>0, 'user_name'=>'');
+            $userInfo = array('user_id' => 0, 'user_name' => '');
         }
         $this->userId = $userInfo['user_id'];
         $this->userName = $userInfo['user_name'];
@@ -76,7 +74,8 @@ class Base extends Controller
      * @param string $keywords
      * @param string $description
      */
-    protected function setHeaderMetas($title = '', $keywords = '', $description = '') {
+    protected function setHeaderMetas($title = '', $keywords = '', $description = '')
+    {
         $header = array('title' => array(), 'keywords' => '', 'description' => '');
         if (!empty($title)) {
             $header['title'] = is_array($title) ? array_merge($header['title'], $title) : array($title);
@@ -98,7 +97,7 @@ class Base extends Controller
         $header['description'] = !empty($description) ? $description : SettingService::get('site.description');
         $header['title'] = implode(' - ', $header['title']);
         foreach ($header as $key => $val) {
-            $header[$key] = String::safeStr(strip_tags(str_replace(array("\r","\n"), '', $val)));
+            $header[$key] = String::safeStr(strip_tags(str_replace(array("\r", "\n"), '', $val)));
         }
 
         $this->assign('header', $header);
@@ -120,19 +119,19 @@ class Base extends Controller
      * @param bool $showMsg
      */
     protected function checkLogin($showMsg = false)
-	{
-		if ($this->userId < 1) {
+    {
+        if ($this->userId < 1) {
             if ($showMsg) {
                 $this->message('请先登录', MSG_LOGIN, URL('user/account/login'));
             } else {
                 $this->redirect(URL('user/account/login'));
             }
-		}
-	}
+        }
+    }
 
     /**
      * 设置flash数据并跳转
-     * 
+     *
      * @param $data
      * @param $route
      */

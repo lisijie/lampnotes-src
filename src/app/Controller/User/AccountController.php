@@ -18,7 +18,7 @@ class AccountController extends Base
                 $password2 = $this->get('password2');
                 $email = $this->get('email');
 
-                $data = array('userName'=>$userName, 'email'=>$email);
+                $data = array('userName' => $userName, 'email' => $email);
                 if (empty($userName) || empty($password) || empty($password2) || empty($email)) {
                     $data['errMsg'] = '请输入完整信息';
                     $this->flashMessage($data);
@@ -28,15 +28,15 @@ class AccountController extends Base
                     $this->flashMessage($data);
                 }
 
-	            UserAccountService::register($userName, $password, $email);
-	            UserAccountService::login($userName, $password);
+                UserAccountService::register($userName, $password, $email);
+                UserAccountService::login($userName, $password);
                 $this->redirect('/');
             } catch (\Exception $e) {
-                $this->flashMessage(array('errMsg' => $e->getMessage(), 'userName'=>$userName, 'email'=>$email));
+                $this->flashMessage(array('errMsg' => $e->getMessage(), 'userName' => $userName, 'email' => $email));
             }
         }
 
-	    $this->setHeaderMetas(0, '注册');
+        $this->setHeaderMetas(0, '注册');
 
         $this->assign(array(
             'errMsg' => $this->session->getFlash('errMsg'),
@@ -64,15 +64,15 @@ class AccountController extends Base
 
                 $expire = $remember ? 86400 * 7 : 0;
 
-	            UserAccountService::login($account, $password, $expire);
+                UserAccountService::login($account, $password, $expire);
                 $this->redirect($refer ? $refer : '/');
             } catch (\Exception $e) {
-                $this->flashMessage(array('errMsg'=>$e->getMessage()));
+                $this->flashMessage(array('errMsg' => $e->getMessage()));
             }
         }
 
-	    $this->setHeaderMetas(0, '登录');
-        $this->assign('refer', $refer ?: $this->getRefer());
+        $this->setHeaderMetas(0, '登录');
+        $this->assign('refer', $refer ? : $this->getRefer());
         $this->assign('errMsg', $this->session->getFlash('errMsg'));
         $this->display();
     }

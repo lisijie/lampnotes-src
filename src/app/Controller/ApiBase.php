@@ -20,7 +20,7 @@ class ApiBase extends Controller
         $this->session = App::get('session');
         $userInfo = UserCookieService::getLoginInfo();
         if (empty($userInfo)) {
-            $userInfo = array('user_id'=>0, 'user_name'=>'');
+            $userInfo = array('user_id' => 0, 'user_name' => '');
         }
         $this->userId = $userInfo['user_id'];
         $this->userName = $userInfo['user_name'];

@@ -8,14 +8,14 @@ class TopicModel extends Model
 
     protected $tableName = '#table_topics';
 
-	public function addTopic($data)
-	{
+    public function addTopic($data)
+    {
         return $this->insert($data);
-	}
+    }
 
     public function getTopicById($topicId)
     {
-        return $this->getRow(array('id'=>$topicId));
+        return $this->getRow(array('id' => $topicId));
     }
 
     public function getTopicListByIds(array $topicIds, $fields = array())
@@ -32,7 +32,7 @@ class TopicModel extends Model
     public function getHotTopicList($page, $pageSize)
     {
         $fields = $filter = $order = array();
-        $order = array('hot_score' => 'desc', 'id'=>'desc');
+        $order = array('hot_score' => 'desc', 'id' => 'desc');
         return $this->page($fields, $filter, $order, $page, $pageSize);
     }
 
@@ -47,7 +47,7 @@ class TopicModel extends Model
     {
         $fields = array();
         $filter = array('special_type' => $specialType);
-        $order = array('hot_score' => 'desc', 'update_time'=>'desc');
+        $order = array('hot_score' => 'desc', 'update_time' => 'desc');
         return $this->page($fields, $filter, $order, $page, $pageSize);
     }
 
@@ -61,16 +61,16 @@ class TopicModel extends Model
         return $this->count(array('special_type' => $specialType));
     }
 
-	public function updateTopic($id, $data)
-	{
-		return $this->update($data, array('id'=>$id));
-	}
+    public function updateTopic($id, $data)
+    {
+        return $this->update($data, array('id' => $id));
+    }
 
-	public function incrementField($id, $field, $value = 1)
-	{
-		$value = intval($value);
-		$sql = "UPDATE {$this->tableName} SET `{$field}` = `{$field}` + {$value} WHERE id = " . intval($id);
-		return $this->db->execute($sql);
-	}
+    public function incrementField($id, $field, $value = 1)
+    {
+        $value = intval($value);
+        $sql = "UPDATE {$this->tableName} SET `{$field}` = `{$field}` + {$value} WHERE id = " . intval($id);
+        return $this->db->execute($sql);
+    }
 
 }

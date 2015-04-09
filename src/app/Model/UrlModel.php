@@ -19,7 +19,7 @@ class UrlModel extends Model
 
     public function getTopicIdsByHash($hash)
     {
-        $list = $this->select(array('topic_id'), array('hash'=>$hash));
+        $list = $this->select(array('topic_id'), array('hash' => $hash));
         $result = array();
         foreach ($list as $row) {
             $result[] = $row['topic_id'];

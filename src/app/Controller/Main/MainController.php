@@ -14,19 +14,19 @@ class MainController extends Base
     {
         parent::init();
         $this->assign(array(
-            'topUsers'  => UserService::getTopUser(20),
-            'topSites'  => SiteService::getTopList(10),
+            'topUsers' => UserService::getTopUser(20),
+            'topSites' => SiteService::getTopList(10),
         ));
     }
 
     //首页，默认按热门排序
-	public function indexAction()
-	{
+    public function indexAction()
+    {
         $page = max(1, intval($this->get('page')));
         $pageSize = static::PAGE_SIZE;
         $total = 0;
-		$this->setHeaderMetas();
-		$list = TopicService::getHotTopicList($page, $pageSize, $total);
+        $this->setHeaderMetas();
+        $list = TopicService::getHotTopicList($page, $pageSize, $total);
 
         $voteList = array();
         if ($this->userId > 0) {
@@ -37,16 +37,16 @@ class MainController extends Base
             $voteList = UserService::getTopicVoteStatus($this->userId, $topicIds);
         }
 
-		$this->assign(array(
-            'voteList'  => $voteList,
-			'topics'    => $list,
-            'page'      => $page,
-            'pageSize'  => $pageSize,
-            'total'     => $total,
-		));
+        $this->assign(array(
+            'voteList' => $voteList,
+            'topics' => $list,
+            'page' => $page,
+            'pageSize' => $pageSize,
+            'total' => $total,
+        ));
 
-		$this->display();
-	}
+        $this->display();
+    }
 
     //最新发布的列表
     public function newestAction()
@@ -68,11 +68,11 @@ class MainController extends Base
         }
 
         $this->assign(array(
-            'voteList'  => $voteList,
-            'topics'    => $list,
-            'page'      => $page,
-            'pageSize'  => $pageSize,
-            'total'     => $total,
+            'voteList' => $voteList,
+            'topics' => $list,
+            'page' => $page,
+            'pageSize' => $pageSize,
+            'total' => $total,
         ));
 
         $this->display('main/main/index');
@@ -98,11 +98,11 @@ class MainController extends Base
         }
 
         $this->assign(array(
-            'voteList'  => $voteList,
-            'topics'    => $list,
-            'page'      => $page,
-            'pageSize'  => $pageSize,
-            'total'     => $total,
+            'voteList' => $voteList,
+            'topics' => $list,
+            'page' => $page,
+            'pageSize' => $pageSize,
+            'total' => $total,
         ));
 
         $this->display('main/main/index');
@@ -128,11 +128,11 @@ class MainController extends Base
         }
 
         $this->assign(array(
-            'voteList'  => $voteList,
-            'topics'    => $list,
-            'page'      => $page,
-            'pageSize'  => $pageSize,
-            'total'     => $total,
+            'voteList' => $voteList,
+            'topics' => $list,
+            'page' => $page,
+            'pageSize' => $pageSize,
+            'total' => $total,
         ));
 
         $this->display('main/main/index');

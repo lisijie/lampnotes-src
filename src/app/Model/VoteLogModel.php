@@ -15,12 +15,12 @@ class VoteLogModel extends Model
 
     public function get($topicId, $userId)
     {
-        return $this->getRow(array('topic_id'=>$topicId, 'user_id'=>$userId));
+        return $this->getRow(array('topic_id' => $topicId, 'user_id' => $userId));
     }
 
     public function getVoteStatus($userId, array $topicIds)
     {
-        return $this->select(array('topic_id', 'vote_time'), array('user_id'=>$userId, 'topic_id' => $topicIds));
+        return $this->select(array('topic_id', 'vote_time'), array('user_id' => $userId, 'topic_id' => $topicIds));
     }
 
 }

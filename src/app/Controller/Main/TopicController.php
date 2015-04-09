@@ -61,12 +61,12 @@ class TopicController extends Base
     }
 
     //回复话题
-	public function replyAction()
-	{
-		$this->checkLogin();
+    public function replyAction()
+    {
+        $this->checkLogin();
 
-		$topicId = intval($this->get('topic_id'));
-		$content = $this->get('reply_content');
+        $topicId = intval($this->get('topic_id'));
+        $content = $this->get('reply_content');
 
         if (empty($topicId) || empty($content)) {
             $this->message('请输入回复内容');
@@ -75,13 +75,13 @@ class TopicController extends Base
         $content = preg_replace('/\n{3,}/', "\n\n", str_replace("\r", '', $content));
         $content = nl2br($content);
 
-		try {
+        try {
             CommentService::addComment($this->userId, $topicId, $content);
-			$this->redirect(URL('main/topic/show', array('id'=>$topicId)));
-		} catch (ServiceException $e) {
-			$this->message($e->getMessage());
-		}
-	}
+            $this->redirect(URL('main/topic/show', array('id' => $topicId)));
+        } catch (ServiceException $e) {
+            $this->message($e->getMessage());
+        }
+    }
 
     //跳转
     public function goAction()

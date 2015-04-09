@@ -63,7 +63,7 @@ class UserModel extends Model
      */
     public function getByUserName($userName)
     {
-        return $this->getRow(array('user_name'=>$userName));
+        return $this->getRow(array('user_name' => $userName));
     }
 
     /**
@@ -74,7 +74,7 @@ class UserModel extends Model
      */
     public function getById($userId)
     {
-        return $this->getRow(array('id'=>$userId));
+        return $this->getRow(array('id' => $userId));
     }
 
     /**
@@ -85,7 +85,7 @@ class UserModel extends Model
      */
     public function getByEmail($email)
     {
-        return $this->getRow(array('email'=>$email));
+        return $this->getRow(array('email' => $email));
     }
 
     /**
@@ -124,6 +124,6 @@ class UserModel extends Model
      */
     public function getTopUserByScore($num, $fields = array())
     {
-        return $this->select($fields, array(), array('score'=>'desc'), $num);
+        return $this->select($fields, array(), array('score' => 'desc'), $num);
     }
 }

@@ -9,8 +9,9 @@
 <body style="background:#f0f0f0;text-align:center;font-family:Verdana;">
 <div style="background:#fff;width:500px;margin:50px auto;font-size:14px;">
     <h1 style="font-size:14px;padding:8px;background:#CF682D;color:#ffffff;">提示信息</h1>
-    <div style="text-align:left;padding:8px;"><?=$msg?></div>
-    <div style="padding:8px;"><a href="<?=($redirect ? : '/')?>">如果您的浏览器没自动跳转，请点击这里</a></div>
+
+    <div style="text-align:left;padding:8px;"><?= $msg ?></div>
+    <div style="padding:8px;"><a href="<?= ($redirect ? : '/') ?>">如果您的浏览器没自动跳转，请点击这里</a></div>
 </div>
 </body>
 </html>
