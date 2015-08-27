@@ -1,4 +1,3 @@
-<?php $this->layout('common/header') ?>
 
     <div class="row">
         <div class="col-sm-12">
@@ -48,5 +47,3 @@
             </form>
         </div>
     </div>
-
-<?php $this->layout('common/footer') ?>

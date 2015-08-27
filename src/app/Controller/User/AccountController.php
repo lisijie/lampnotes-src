@@ -21,18 +21,18 @@ class AccountController extends Base
                 $data = array('userName' => $userName, 'email' => $email);
                 if (empty($userName) || empty($password) || empty($password2) || empty($email)) {
                     $data['errMsg'] = '请输入完整信息';
-                    $this->flashMessage($data);
+                    return $this->flashMessage($data);
                 }
                 if ($password != $password2) {
                     $data['errMsg'] = '两次输入的密码不一致';
-                    $this->flashMessage($data);
+                    return $this->flashMessage($data);
                 }
 
                 UserAccountService::register($userName, $password, $email);
                 UserAccountService::login($userName, $password);
-                $this->redirect('/');
+                return $this->redirect('/');
             } catch (\Exception $e) {
-                $this->flashMessage(array('errMsg' => $e->getMessage(), 'userName' => $userName, 'email' => $email));
+                return $this->flashMessage(array('errMsg' => $e->getMessage(), 'userName' => $userName, 'email' => $email));
             }
         }
 
@@ -53,7 +53,7 @@ class AccountController extends Base
         $refer = $this->get('refer');
 
         if ($this->userId > 0) {
-            $this->redirect('/');
+            return $this->redirect('/');
         }
 
         if ($this->isSubmit()) {
@@ -65,9 +65,9 @@ class AccountController extends Base
                 $expire = $remember ? 86400 * 7 : 0;
 
                 UserAccountService::login($account, $password, $expire);
-                $this->redirect($refer ? $refer : '/');
+                return $this->redirect($refer ? $refer : '/');
             } catch (\Exception $e) {
-                $this->flashMessage(array('errMsg' => $e->getMessage()));
+                return $this->flashMessage(array('errMsg' => $e->getMessage()));
             }
         }
 

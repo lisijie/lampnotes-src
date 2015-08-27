@@ -32,25 +32,25 @@ class SubmitController extends Base
         $content = $this->get('content');
 
         if (empty($title)) {
-            $this->flashMessage(array('errMsg' => '请填写标题'), 'main/submit/index');
+            return $this->flashMessage(array('errMsg' => '请填写标题'), 'main/submit/index');
         }
         if (empty($url) && empty($content)) {
-            $this->flashMessage(array('errMsg' => 'URL和内容至少填写一个'), 'main/submit/index');
+            return $this->flashMessage(array('errMsg' => 'URL和内容至少填写一个'), 'main/submit/index');
         }
         if (!empty($url) && !Validate::valid('url', $url)) {
-            $this->flashMessage(array('errMsg' => 'URL无效'), 'main/submit/index');
+            return $this->flashMessage(array('errMsg' => 'URL无效'), 'main/submit/index');
         }
 
         $specialType = 0;
         if (strpos($title, '讨论：') === 0 || strpos($title, '讨论:') === 0) {
             $specialType = 1;
             if (empty($content)) {
-                $this->flashMessage(array('errMsg' => '讨论贴内容不能为空'), 'main/submit/index');
+                return $this->flashMessage(array('errMsg' => '讨论贴内容不能为空'), 'main/submit/index');
             }
         } elseif (strpos($title, '招聘：') === 0 || strpos($title, '招聘:') === 0) {
             $specialType = 2;
             if (empty($content)) {
-                $this->flashMessage(array('errMsg' => '招聘贴内容不能为空'), 'main/submit/index');
+                return $this->flashMessage(array('errMsg' => '招聘贴内容不能为空'), 'main/submit/index');
             }
         }
 
@@ -69,7 +69,7 @@ class SubmitController extends Base
                 'special_type' => $specialType,
             ));
         } catch (ServiceException $e) {
-            $this->flashMessage(array('errMsg' => $e->getMessage()), 'main/submit/index');
+            return $this->flashMessage(array('errMsg' => $e->getMessage()), 'main/submit/index');
         }
 
         $this->redirect(URL('main/topic/show', array('id' => $topicId)));

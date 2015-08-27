@@ -19,13 +19,13 @@ class TopicController extends Base
         $page = max(1, intval($this->get('page')));
         $pageSize = 20;
         if ($topicId < 1) {
-            $this->message('话题ID错误');
+            return $this->message('话题ID错误');
         }
 
         try {
             $topic = TopicService::getTopicInfo($topicId);
         } catch (ServiceException $e) {
-            $this->message($e->getMessage());
+            return $this->message($e->getMessage());
         }
 
         $commentList = $headlines = array();
@@ -69,7 +69,7 @@ class TopicController extends Base
         $content = $this->get('reply_content');
 
         if (empty($topicId) || empty($content)) {
-            $this->message('请输入回复内容');
+            return $this->message('请输入回复内容');
         }
 
         $content = preg_replace('/\n{3,}/', "\n\n", str_replace("\r", '', $content));
@@ -77,9 +77,9 @@ class TopicController extends Base
 
         try {
             CommentService::addComment($this->userId, $topicId, $content);
-            $this->redirect(URL('main/topic/show', array('id' => $topicId)));
+            return $this->redirect(URL('main/topic/show', array('id' => $topicId)));
         } catch (ServiceException $e) {
-            $this->message($e->getMessage());
+            return $this->message($e->getMessage());
         }
     }
 

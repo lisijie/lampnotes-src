@@ -65,21 +65,21 @@ class ProfileController extends Base
                 $newPassword = $this->get('newpassword');
                 $newPassword2 = $this->get('newpassword2');
                 if (empty($password)) {
-                    $this->flashMessage(array('errMsg' => '请输入当前密码'));
+                    return $this->flashMessage(array('errMsg' => '请输入当前密码'));
                 }
                 if (empty($newPassword)) {
-                    $this->flashMessage(array('errMsg' => '请输入新密码'));
+                    return $this->flashMessage(array('errMsg' => '请输入新密码'));
                 }
                 if (empty($newPassword2)) {
-                    $this->flashMessage(array('errMsg' => '请输入确认密码'));
+                    return $this->flashMessage(array('errMsg' => '请输入确认密码'));
                 }
                 if ($newPassword != $newPassword2) {
-                    $this->flashMessage(array('errMsg' => '两次输入的密码不一致'));
+                    return $this->flashMessage(array('errMsg' => '两次输入的密码不一致'));
                 }
                 UserAccountService::changePassword($this->userId, $password, $newPassword);
                 $sucMsg = '密码修改成功，请牢记你的新密码！';
             } catch (ServiceException $e) {
-                $this->flashMessage(array('errMsg' => $e->getMessage()));
+                return $this->flashMessage(array('errMsg' => $e->getMessage()));
             }
         }
         $this->setHeaderMetas(array('密码修改', $this->userName));

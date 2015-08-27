@@ -34,7 +34,7 @@ class ApiBase extends Controller
     protected function checkLogin()
     {
         if ($this->userId < 1) {
-            $this->message('请先登录', MSG_LOGIN, URL('user/account/login'));
+            return $this->message('请先登录', MSG_LOGIN, URL('user/account/login'));
         }
     }
 

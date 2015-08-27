@@ -1,4 +1,4 @@
-<?php $this->layout('common/header') ?>
+
 
 <div class="row">
 
@@ -46,8 +46,6 @@
 
     </div>
 
-    <?php $this->layout('common/sidebar') ?>
+    <?php include $this->getViewFile('common/sidebar') ?>
 
 </div>
-
-<?php $this->layout('common/footer') ?>

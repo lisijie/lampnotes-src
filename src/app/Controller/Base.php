@@ -48,12 +48,15 @@ class Base extends Controller
         $this->session = App::get('session');
 
         $this->request->addFilter('\\Core\\Lib\\String::safeStr');
-        $this->view->registerFunc('time', '\\App\\Common\\Util::strTime');
-
-        $this->view->registerFunc('pager', function ($page, $pageSize, $totalNum, $route = CUR_ROUTE, $params = array()) {
+        App::view()->registerFunc('time', '\\App\\Common\\Util::strTime');
+        App::view()->registerFunc('pager', function ($page, $pageSize, $totalNum, $route = CUR_ROUTE, $params = array()) {
             $pager = new Pager($page, $pageSize, $totalNum, $route, $params);
             return $pager->makeHtml();
         });
+
+        $this->setLayout('common/layout');
+        $this->setLayoutSection('header', 'common/header');
+        $this->setLayoutSection('footer', 'common/footer');
 
         $userInfo = UserCookieService::getLoginInfo();
         if (empty($userInfo)) {
