@@ -19,7 +19,8 @@ class Handler extends BaseHandler
     protected function renderHttpException(HttpException $e)
     {
         if ($e->getCode() == 404) {
-            $view = App::get('view');
+            $view = App::view();
+            $view->reset();
             $view->assign('site', App::conf('setting', 'site'));
             echo $view->render('errors/404');
             return;
